@@ -4,14 +4,85 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="sb.css">
+    <link rel="stylesheet" href="lib/MDI-WXSS/MDI.css">
     <title>Frontier</title>
     <style>
+        navbar{
+            display: flex;
+            background: rgb(244, 244, 244);
+            flex-shrink: 0;
+            flex-grow: 0;
+            height:3rem;
+            justify-content: space-between;
+        }
+
+        navbar > .nav-actions {
+            flex-shrink: 0;
+            flex-grow: 0;
+            display: flex;
+        }
+
+        navbar > .nav-actions > div {
+            height: 3rem;
+            width: 3rem;
+            line-height: 3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            color:rgb(96, 96, 96);
+        }
+
+        navbar > .nav-input {
+            display: flex;
+            align-items: center;
+            flex-shrink: 1;
+            flex-grow: 1;
+        }
+
+        navbar > .nav-input > input {
+            display: block;
+            flex-shrink: 1;
+            flex-grow: 1;
+            height: 2rem;
+            margin: 0;
+            box-sizing: border-box;
+            border: 1px solid rgba(0,0,0,0.25);
+            transition: .2s ease-out .0s;
+            border-radius: 4px;
+            padding:0 0.5rem;;
+        }
+
+        navbar > .nav-input > input:hover {
+            border: 1px solid rgba(0,0,0,0.4);
+        }
+
+        navbar > .nav-input > input:focus {
+            outline: none;
+            border: 1px solid rgba(3,169,244,0.6);
+        }
+
+        navbar > .nav-extension {
+            flex-shrink: 1;
+            flex-grow: 0;
+        }
+
+        navbar > .nav-extension > div {
+            height: 3rem;
+            width: 3rem;
+            line-height: 3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            color:rgb(96, 96, 96);
+        }
+
         .titlebar {
             display: flex;
             justify-content: space-between;
             position: relative;
             height: 32px;
             padding: 0;
+            background-color: rgb(232, 232, 232);
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .titlebar svg{
@@ -52,10 +123,10 @@
         .titlebar-close {
             float: left;
             width: 45px;
-            height: 31px;
+            height: 32px;
             margin: 0;
             text-align: center;
-            line-height: 29px;
+            line-height: 30px;
 
             -webkit-transition: background-color .2s;
             -moz-transition: background-color .2s;
@@ -162,7 +233,7 @@
 </head>
 
 <body>
-    <div class="titlebar titlebar-light draggable" style="background-color: rgb(238, 238, 238);">
+    <div class="titlebar titlebar-light draggable">
         <div class="titlebar-drag-region"></div>
         <div class="titlebar-title">Frontier Browser</div>
         <div class="titlebar-controls">
@@ -192,7 +263,41 @@
         </div>
         <div class="titlebar-resizer"></div>
     </div>
-    <webview src="https://johnzhang.xyz/"></webview>
+    <navbar>
+        <div class="nav-actions">
+            <div><i class="MDI arrow-left"></i></div>
+            <div><i class="MDI arrow-right"></i></div>
+            <div><i class="MDI refresh"></i></div>
+            <div><i class="MDI home"></i></div>
+        </div>
+        <div class="nav-input">
+            <input id="urlInput" type="text" placeholder="在这里搜索">
+        </div>
+        <div class="nav-extension">
+            <div><i class="MDI menu"></i></div>
+        </div>
+    </navbar>
+    <webview id="webview" src="https://johnzhang.xyz/"></webview>
 </body>
-
+<script>
+    var webContents=undefined;
+    document.getElementById("urlInput").addEventListener("keydown", event => {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) {
+            console.log(1);
+            if(webContents!==undefined) webContents.loadURL(document.getElementById("urlInput").value);
+        }
+    });
+    window.addEventListener("load",function() {
+        // https://johnzhang.xyz/
+        webContents=document.getElementById("webview").getWebContents();
+        webview.addEventListener('load-commit', e => {
+            // console.log(e);
+            if(e.isMainFrame){
+                // document.getElementById("urlInput").value = webContents.getURL();
+                document.getElementById("urlInput").value = e.url;
+            }
+        });
+    });
+</script>
 </html>
