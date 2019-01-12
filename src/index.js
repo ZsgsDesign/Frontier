@@ -8,10 +8,11 @@ let mainWindow;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    "min-width":500,
-    "min-height":150,
+    minWidth:500,
+    minHeight:150,
     frame: false,
-    show: false
+    show: false,
+    title: "Frontier 浏览器"
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
@@ -23,7 +24,7 @@ const createWindow = () => {
   });
 
   mainWindow.once('ready-to-show', () => {
-    win.show()
+    mainWindow.show()
   })
 };
 
