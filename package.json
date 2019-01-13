@@ -1,8 +1,8 @@
 {
   "name": "frontier",
-  "productName": "frontier",
+  "productName": "Frontier",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Frontier is a modern, light-weight web browser using webkit.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -12,7 +12,7 @@
     "lint": "eslint src --color"
   },
   "keywords": [],
-  "author": "ZsgsD",
+  "author": "zsfsdesign",
   "license": "MIT",
   "config": {
     "forge": {
@@ -37,8 +37,8 @@
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "zsgsdesign",
+        "name": "Frontier"
       },
       "windowsStoreConfig": {
         "packageName": "",
