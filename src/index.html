@@ -39,7 +39,9 @@
         }
 
         navbar > .nav-input > input {
-            display: block;
+            /* display: flex;
+            align-items: center;
+            flex-wrap: nowrap; */
             flex-shrink: 1;
             flex-grow: 1;
             height: 2rem;
@@ -48,7 +50,21 @@
             border: 1px solid rgba(0,0,0,0.25);
             transition: .2s ease-out .0s;
             border-radius: 4px;
-            padding:0 0.5rem;;
+            padding:0 0.5rem;
+            -webkit-appearance: textfield;
+            background-color: white;
+            -webkit-rtl-ordering: logical;
+            cursor: text;
+            text-rendering: auto;
+            color: initial;
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+            text-indent: 0px;
+            text-shadow: none;
+            text-align: start;
+            font: 400 0.85rem Arial;
+            -webkit-writing-mode: horizontal-tb !important;
         }
 
         navbar > .nav-input > input:hover {
@@ -271,7 +287,7 @@
             <div><i class="MDI home"></i></div>
         </div>
         <div class="nav-input">
-            <input id="urlInput" type="text" placeholder="在这里搜索">
+            <input id="urlInput" type="text"></input>
         </div>
         <div class="nav-extension">
             <div><i class="MDI menu"></i></div>
@@ -280,21 +296,38 @@
     <webview id="webview" src="https://johnzhang.xyz/"></webview>
 </body>
 <script>
-    var webContents=undefined;
-    document.getElementById("urlInput").addEventListener("keydown", event => {
+
+    var webContents = undefined;
+
+    var onmiBox = document.getElementById("urlInput");
+
+    onmiBox.addEventListener("dragenter", e => {
+        // console.log("获得拖拽焦点");
+        onmiBox.select();
+    });
+
+    onmiBox.addEventListener("dragleave", e => {
+        // console.log("失去拖拽焦点");
+        onmiBox.blur();
+    });
+
+    onmiBox.addEventListener("drop", event => {
+        event.preventDefault();
+        onmiBox.value=event.dataTransfer.getData("Text");
+    });
+
+    onmiBox.addEventListener("keydown", event => {
         var e = event || window.event;
         if (e && e.keyCode == 13) {
-            console.log(1);
             if(webContents!==undefined) webContents.loadURL(document.getElementById("urlInput").value);
         }
     });
+    
     window.addEventListener("load",function() {
         // https://johnzhang.xyz/
         webContents=document.getElementById("webview").getWebContents();
         webview.addEventListener('load-commit', e => {
-            // console.log(e);
             if(e.isMainFrame){
-                // document.getElementById("urlInput").value = webContents.getURL();
                 document.getElementById("urlInput").value = e.url;
             }
         });

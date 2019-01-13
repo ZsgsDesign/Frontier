@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+const windowStateKeeper = require('electron-window-state');
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -7,13 +8,25 @@ if (require('electron-squirrel-startup')) {
 let mainWindow;
 
 const createWindow = () => {
+
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  });
+
   mainWindow = new BrowserWindow({
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     minWidth:500,
     minHeight:150,
     frame: false,
     show: false,
     title: "Frontier 浏览器"
   });
+
+  mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
