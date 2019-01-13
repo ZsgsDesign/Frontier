@@ -278,7 +278,7 @@
                 </svg>
                 <svg class="maximize-svg" x="0px" y="0px" viewBox="0 0 10 10">
                     <mask id="Mask">
-                        <rect fill="#FFFFFF" width="10" height="10"></rect>
+                        <rect fill="#FFFFFF" width="10" height="10" style="fill:#fff;"></rect>
                         <path fill="#000000" d="M 3 1 L 9 1 L 9 7 L 8 7 L 8 2 L 3 2 L 3 1 z"></path>
                         <path fill="#000000" d="M 1 3 L 7 3 L 7 9 L 1 9 L 1 3 z"></path>
                     </mask>
@@ -309,34 +309,61 @@
     </navbar>
     <webview id="webview" src="https://johnzhang.xyz/"></webview>
 </body>
+<script>window.$ = window.jQuery = require('./lib/jquery/jquery-3.2.1.min.js');</script>
 <script>
 
-    var webContents = undefined;
+    /* Window releated */
+    var ipcRenderer = require('electron').ipcRenderer;
+
+    ipcRenderer.on("windowStatusChange", (event, message) => {
+        if(message=="unmaximize")$(".titlebar").removeClass("fullscreen");
+        else $(".titlebar").addClass("fullscreen");
+    });
+
+    window.addEventListener("load",function() {
+        $(document).on("click", ".titlebar-close", function () {
+            ipcRenderer.send('windowStatus','close');
+        });
+        $(document).on("click", ".titlebar-resize", function () {
+            ipcRenderer.send('windowStatus','resize');
+        });
+        $(document).on("click", ".titlebar-minimize", function () {
+            ipcRenderer.send('windowStatus','minimize');
+        });
+    },false);
+
+    /* onmiBox releated */
 
     var onmiBox = document.getElementById("urlInput");
 
-    onmiBox.addEventListener("dragenter", e => {
-        // console.log("获得拖拽焦点");
-        onmiBox.select();
-    });
+    window.addEventListener("load",function() {
+        onmiBox.addEventListener("dragenter", e => {
+            // console.log("获得拖拽焦点");
+            onmiBox.select();
+        });
 
-    onmiBox.addEventListener("dragleave", e => {
-        // console.log("失去拖拽焦点");
-        onmiBox.blur();
-    });
+        onmiBox.addEventListener("dragleave", e => {
+            // console.log("失去拖拽焦点");
+            onmiBox.blur();
+        });
 
-    onmiBox.addEventListener("drop", event => {
-        event.preventDefault();
-        onmiBox.value=event.dataTransfer.getData("Text");
-    });
+        onmiBox.addEventListener("drop", event => {
+            event.preventDefault();
+            onmiBox.value=event.dataTransfer.getData("Text");
+        });
 
-    onmiBox.addEventListener("keydown", event => {
-        var e = event || window.event;
-        if (e && e.keyCode == 13) {
-            if(webContents!==undefined) webContents.loadURL(document.getElementById("urlInput").value);
-        }
-    });
-    
+        onmiBox.addEventListener("keydown", event => {
+            var e = event || window.event;
+            if (e && e.keyCode == 13) {
+                if(webContents!==undefined) webContents.loadURL(document.getElementById("urlInput").value);
+            }
+        });
+    },false);
+
+    /* WebView releated */
+
+    var webContents = undefined;
+
     window.addEventListener("load",function() {
         // https://johnzhang.xyz/
         webContents=document.getElementById("webview").getWebContents();
@@ -345,6 +372,6 @@
                 document.getElementById("urlInput").value = e.url;
             }
         });
-    });
+    },false);
 </script>
 </html>
