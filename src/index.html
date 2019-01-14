@@ -14,6 +14,7 @@
             flex-grow: 0;
             height:3rem;
             justify-content: space-between;
+            user-select: none; /* prevent browser default select */
         }
 
         navbar > .nav-actions {
@@ -58,20 +59,6 @@
             transition: .2s ease-out .0s;
             border-radius: 4px;
             padding:0 0.5rem;
-            -webkit-appearance: textfield;
-            background-color: white;
-            -webkit-rtl-ordering: logical;
-            cursor: text;
-            text-rendering: auto;
-            color: initial;
-            letter-spacing: normal;
-            word-spacing: normal;
-            text-transform: none;
-            text-indent: 0px;
-            text-shadow: none;
-            text-align: start;
-            font: 400 0.85rem Arial;
-            -webkit-writing-mode: horizontal-tb !important;
         }
 
         navbar > .nav-input > input:hover {
@@ -337,12 +324,17 @@
     var onmiBox = document.getElementById("urlInput");
 
     window.addEventListener("load",function() {
-        onmiBox.addEventListener("dragenter", e => {
+        onmiBox.addEventListener("dragenter", event => {
             // console.log("获得拖拽焦点");
             onmiBox.select();
         });
 
-        onmiBox.addEventListener("dragleave", e => {
+        // $("navbar")[0].addEventListener("drag", event => {
+        //     console.log("拖拽");
+        //     $("navbar")[0].preventDefault();
+        // });
+
+        onmiBox.addEventListener("dragleave", event => {
             // console.log("失去拖拽焦点");
             onmiBox.blur();
         });
@@ -350,6 +342,11 @@
         onmiBox.addEventListener("drop", event => {
             event.preventDefault();
             onmiBox.value=event.dataTransfer.getData("Text");
+        });
+
+        onmiBox.addEventListener("click", event => {
+            console.log("focus");
+            onmiBox.focus();
         });
 
         onmiBox.addEventListener("keydown", event => {
