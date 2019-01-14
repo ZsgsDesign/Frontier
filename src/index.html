@@ -322,17 +322,13 @@
     /* onmiBox releated */
 
     var onmiBox = document.getElementById("urlInput");
-
+    const parseDomain = require("parse-domain");
+    
     window.addEventListener("load",function() {
         onmiBox.addEventListener("dragenter", event => {
             // console.log("获得拖拽焦点");
             onmiBox.select();
         });
-
-        // $("navbar")[0].addEventListener("drag", event => {
-        //     console.log("拖拽");
-        //     $("navbar")[0].preventDefault();
-        // });
 
         onmiBox.addEventListener("dragleave", event => {
             // console.log("失去拖拽焦点");
@@ -344,19 +340,21 @@
             onmiBox.value=event.dataTransfer.getData("Text");
         });
 
-        onmiBox.addEventListener("click", event => {
-            console.log("focus");
-            onmiBox.focus();
-        });
-
         onmiBox.addEventListener("keydown", event => {
             var e = event || window.event;
             if (e && e.keyCode == 13) {
-                if(webContents!==undefined) webContents.loadURL(document.getElementById("urlInput").value);
+                // 这个算法有问题，但是我暂时不去改他
+                let domain = parseDomain(onmiBox.value);
+                if(domain==null) webContents.loadURL("https://www.baidu.com/#ie=UTF-8&wd="+onmiBox.value);
+                else{
+                    if(onmiBox.value.indexOf(":")!=-1) webContents.loadURL(onmiBox.value);
+                    else webContents.loadURL("http://"+onmiBox.value);
+                }
             }
         });
     },false);
 
+    
     /* WebView releated */
 
     var webContents = undefined;
