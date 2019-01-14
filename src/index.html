@@ -345,7 +345,7 @@
             if (e && e.keyCode == 13) {
                 // 这个算法有问题，但是我暂时不去改他
                 let domain = parseDomain(onmiBox.value);
-                if(domain==null) webContents.loadURL("https://www.baidu.com/#ie=UTF-8&wd="+onmiBox.value);
+                if(domain==null) webContents.loadURL("https://www.baidu.com/#ie=UTF-8&wd="+onmiBox.value); //自定义搜索引擎
                 else{
                     if(onmiBox.value.indexOf(":")!=-1) webContents.loadURL(onmiBox.value);
                     else webContents.loadURL("http://"+onmiBox.value);
